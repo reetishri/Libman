@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #333;
+            color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #161616;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        h2, h3 {
+            color: #fff;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+        a {
+            display: block;
+            margin: 10px 0;
+            color: #ff801e;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            background-color: #006ca6;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #00a6ff;
+        }
+        .btn2 {
+            background-color: #d10000;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn2:hover {
+            background-color: #a00000;
+        }
+        .alert {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .alert-success {
+            background-color: #4caf50;
+            color: white;
+        }
+        .alert-error {
+            background-color: #f44336;
+            color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #444;
+            color: #fff;
+        }
+        td {
+            background-color: #222;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, {{ student.student_name }}!</h2>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if student.picture %}
+            <img src="{{ student.picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="max-width: 150px;">
+        {% endif %}
+
+        <p><strong>Roll No:</strong> {{ student.roll_no }}</p>
+        <p><strong>Department:</strong> {{ student.department }}</p>
+        <p><strong>Pending Fine:</strong>
+        <input type="text" value="{{ total_fine }}" readonly class="form-control" style="max-width: 200px; display: inline-block;"></p>
+        
+        <h3>Issued Books</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Book ID</th>
+                    <th>Book Name</th>
+                    <th>Days Remaining</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in issued_books_with_days_remaining %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ item.issue.book_id.book_id }}</td>
+                    <td>{{ item.issue.book_id.book_name }}</td>
+                    <td>{{ item.days_remaining }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <br>
+        <a href="{% url 'library:book_catalogue' %}" class="btn">Book Catalogue</a>
+        <br><br>
+        <a href="{% url 'library:password_change' %}" class="btn">Change Password</a>
+        <a href="{% url 'library:logout' %}" class="btn2">Logout</a>
+    </div>
+</body>
+</html>

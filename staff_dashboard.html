@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #333;
+            color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #161616;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        h2 {
+            color: #fff;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+        a {
+            display: block;
+            margin: 10px 0;
+            color: #00a6ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            background-color: #006ca6;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #00a6ff;
+        }
+        .btn2 {
+            background-color: #d10000;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn2:hover {
+            background-color: #a00000;
+        }
+        .alert {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .alert-success {
+            background-color: #4caf50;
+            color: white;
+        }
+        .alert-error {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, {{ staff.staff_name }}!</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <p><strong>Staff ID:</strong> {{ staff.staff_id }}</p>
+        <br>
+
+        <a href="{% url 'library:student_enquiry' %}" class="btn">Student Enquiry</a>
+        <a href="{% url 'library:book_enquiry' %}" class="btn">Book Enquiry</a>
+        <a href="{% url 'library:book_catalogue' %}" class="btn">Book Catalogue</a>
+        <a href="{% url 'library:book_record' %}" class="btn">Book Record</a>
+        <a href="{% url 'library:issue_return' %}" class="btn">Issue/Return Books</a>
+        <br><br><br>
+        <a href="{% url 'library:password_change' %}" class="btn">Change Password</a>
+        <a href="{% url 'library:logout' %}" class="btn2">Logout</a>
+    </div>
+</body>
+</html>

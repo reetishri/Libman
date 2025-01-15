@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Record</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #333;
+            color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #161616;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        h1, h2 {
+            color: #fff;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+        a {
+            display: block;
+            margin: 10px 0;
+            color: #00a6ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            background-color: #006ca6;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #00a6ff;
+        }
+        .btn2 {
+            background-color: #d10000;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn2:hover {
+            background-color: #a00000;
+        }
+        .alert {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .alert-success {
+            background-color: #4caf50;
+            color: white;
+        }
+        .alert-error {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Book Record</h1>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <section id="add-remove-books">
+            
+            <form action="{% url 'library:book_record' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div>
+                    <input type="radio" id="add_book" name="action" value="add" checked>
+                    <label for="add_book">Add Book</label>
+                    <input type="radio" id="remove_book" name="action" value="remove">
+                    <label for="remove_book">Remove Book</label>
+                </div>
+                <div class="form-group">
+                    <label for="book_name">Book Name:</label>
+                    <input type="text" id="book_name" name="book_name">
+                </div>
+                <div class="form-group">
+                    <label for="book_id">Book ID:</label>
+                    <input type="text" id="book_id" name="book_id" required>
+                </div>
+                <div class="form-group">
+                    <label for="genre">Genre:</label>
+                    <input type="text" id="genre" name="genre">
+                </div>
+                <div class="form-group">
+                    <label for="book_cover">Book Cover:</label>
+                    <input type="file" id="book_cover" name="book_cover">
+                </div>
+                <button type="submit" class="btn">Go</button>
+            </form>
+        </section>
+        <br>
+        <nav>
+            <a href="{% url 'library:book_catalogue' %}">Book Catalogue</a>
+            <a href="{% url 'library:staff_dashboard' %}">Staff Dashboard</a>
+            <a href="{% url 'library:logout' %}" class="btn2">Logout</a>
+        </nav>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addBookRadio = document.getElementById('add_book');
+            const removeBookRadio = document.getElementById('remove_book');
+            const bookFields = document.querySelectorAll('#book_name, #genre, #book_cover');
+            const toggleFields = () => {
+                if (removeBookRadio.checked) {
+                    bookFields.forEach(field => field.closest('div').style.display = 'none');
+                    document.getElementById('book_name').required = false;
+                    document.getElementById('genre').required = false;
+                    document.getElementById('book_cover').required = false;
+                } else {
+                    bookFields.forEach(field => field.closest('div').style.display = 'block');
+                    document.getElementById('book_name').required = true;
+                    document.getElementById('genre').required = true;
+                    document.getElementById('book_cover').required = true;
+                }
+            };
+            addBookRadio.addEventListener('change', toggleFields);
+            removeBookRadio.addEventListener('change', toggleFields);
+            toggleFields();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Enquiry</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #333;
+            color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #161616;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        h1, h2 {
+            color: #fff;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+        a {
+            display: block;
+            margin: 10px 0;
+            color: #00a6ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            background-color: #006ca6;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #00a6ff;
+        }
+        .btn2 {
+            background-color: #d10000;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn2:hover {
+            background-color: #a00000;
+        }
+        img {
+            max-width: 200px;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Book Enquiry</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="book_id">Book ID:</label>
+                <input type="text" id="book_id" name="book_id" required>
+            </div>
+            <button type="submit" class="btn">Search</button>
+        </form><br>
+       
+        {% if book %}
+            <h2>Book Details:</h2>
+            <img src="{{ book.book_cover.url }}" alt="Book Cover">
+            <p><strong>Book Name:</strong> {{ book.book_name }}</p>
+            <p><strong>Book ID:</strong> {{ book.book_id }}</p>
+            <p><strong>Genre:</strong> {{ book.genre }}</p>  <br>
+        {% endif %}
+    
+        {% if book and issue %}
+        <h2>Issued By:</h2>
+            <img src="{{ student.picture.url }}" alt="Student Picture">
+            <p><strong>Student Name:</strong> {{ student.student_name }}</p>
+            <p><strong>Roll Number:</strong> {{ student.roll_no }}</p>
+            <p><strong>Department:</strong> {{ student.department }}</p>
+        {% endif %}
+    
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+        <br><br>
+        <nav>
+            <a href="{% url 'library:staff_dashboard' %}">Staff Dashboard</a>
+            <a href="{% url 'library:logout' %}" class="btn2">Logout</a>
+        </nav>
+    </div>
+</body>
+</html>
